@@ -37,10 +37,10 @@ fun Application.configureDatabase() {
         SchemaUtils.create(Students)
     }
 
-    transaction {
-        exec("CREATE TYPE DaysOfWeek AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY');")
-        exec("CREATE TYPE TypesOfStudy AS ENUM ('LECTURE', 'PRACTISE');")
-    }
+//    transaction {
+//        exec("CREATE TYPE DaysOfWeek AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY');")
+//        exec("CREATE TYPE TypesOfStudy AS ENUM ('LECTURE', 'PRACTISE');")
+//    }
 
     transaction {
         SchemaUtils.create(Studies)

@@ -192,12 +192,12 @@ class ScheduleRepository : SubjectDAO, ScheduleDAO, StudyDAO, StudentsToSchedule
                 .map { rowToStudy(it) }.requireNoNulls()
         }
 
-//    override suspend fun getStudiesForTeacherByDay(teacherId: Int, day: DaysOfWeek): List<Study> =
-//        dbQuery {
-//            Studies.join(Subjects, JoinType.INNER, Studies.subjectId, Subjects.id)
-//                .join(Teachers, JoinType.INNER, Studies.teacherId, Teachers.userId)
-//                .selectAll().where { Studies.teacherId eq teacherId }.map { rowToStudy(it) }.requireNoNulls()
-//        }
+    override suspend fun getStudiesForTeacherByDay(teacherId: UUID, day: DaysOfWeek): List<Study> =
+        dbQuery {
+            Studies.join(Subjects, JoinType.INNER, Studies.subjectId, Subjects.id)
+                .join(Teachers, JoinType.INNER, Studies.teacherId, Teachers.userId)
+                .selectAll().where { Studies.teacherId eq teacherId }.map { rowToStudy(it) }.requireNoNulls()
+        }
 
     override suspend fun addScheduleToStudent(scheduleId: Int, studentId: UUID, isMain: Boolean) {
         dbQuery {

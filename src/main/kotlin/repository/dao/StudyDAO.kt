@@ -5,6 +5,7 @@ import com.example.repository.model.Subject
 import com.example.repository.model.Teacher
 import com.example.utils.DaysOfWeek
 import com.example.utils.TypeOfStudy
+import java.util.*
 
 interface StudyDAO {
     suspend fun getAllStudies(): List<Study>
@@ -24,5 +25,5 @@ interface StudyDAO {
     suspend fun getStudyById(id: Int): Study?
     suspend fun getStudiesForScheduleId(scheduleId: Int): List<Study>
     suspend fun getStudiesForScheduleByDay(scheduleId: Int, day: DaysOfWeek): List<Study>
-//    suspend fun getStudiesForTeacherByDay(teacherId: Int, day: DaysOfWeek): List<Study>
+    suspend fun getStudiesForTeacherByDay(teacherId: UUID, day: DaysOfWeek): List<Study>
 }
