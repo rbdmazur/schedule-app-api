@@ -209,7 +209,7 @@ class ScheduleRepository : SubjectDAO, ScheduleDAO, StudyDAO, StudentsToSchedule
         }
     }
 
-    override suspend fun deleteSchedule(scheduleId: Int, studentId: UUID): Boolean =
+    override suspend fun deleteScheduleFromStudent(scheduleId: Int, studentId: UUID): Boolean =
         dbQuery {
             StudentsToSchedules
                 .deleteWhere { (StudentsToSchedules.scheduleId eq scheduleId) and (StudentsToSchedules.studentId eq studentId) } == 1

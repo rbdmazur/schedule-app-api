@@ -6,5 +6,5 @@ import java.util.UUID
 interface StudentsToScheduleDAO {
     suspend fun addScheduleToStudent(scheduleId: Int, studentId: UUID, isMain: Boolean)
     suspend fun getSchedulesForStudent(studentId: UUID): List<Schedule>
-    suspend fun deleteSchedule(scheduleId: Int, studentId: UUID): Boolean
+    suspend fun deleteScheduleFromStudent(scheduleId: Int, studentId: UUID): Boolean
 }
