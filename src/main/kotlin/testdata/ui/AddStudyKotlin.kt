@@ -37,7 +37,7 @@ class AddStudyKotlin {
 
         private val courses = arrayOf(1, 2, 3, 4)
         private val groups = arrayOf(1, 2, 3, 4, 5)
-        private val faculties = arrayOf("ФПМИ")
+        private val faculties = arrayOf("ФПМИ", "Истфак")
 
         private fun createAddScheduleFrame() {
             val frame = JFrame("Add schedule")

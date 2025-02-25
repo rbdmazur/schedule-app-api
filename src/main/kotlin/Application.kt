@@ -5,6 +5,7 @@ import com.example.repository.configureDatabase
 import com.example.repository.repositories.ScheduleRepository
 import com.example.repository.repositories.UsersRepository
 import com.example.routes.*
+import com.example.testdata.configureTest
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*

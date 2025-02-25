@@ -4,6 +4,7 @@ object Constants {
     const val DB_URL = "jdbc:postgresql://localhost:5432/schedule_database"
     const val DB_USER = "postgres"
     const val DB_PASSWORD = "123445"
+    const val TEST_DATA_PATH = "D:\\Mirai\\2025\\ScheduleApp\\schedule-app-api\\src\\main\\kotlin\\testdata\\files\\"
 
     val TIMES = arrayOf(
         "8:15",

@@ -5,6 +5,7 @@ import com.example.repository.model.Student
 import com.example.repository.repositories.FacultyRepository
 import com.example.repository.repositories.ScheduleRepository
 import com.example.repository.repositories.UsersRepository
+import com.example.utils.Constants.TEST_DATA_PATH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -15,7 +16,7 @@ val usersRepository = UsersRepository()
 val scheduleRepository = ScheduleRepository()
 
 suspend fun addFaculties() {
-    val file = File("D:\\Projects\\schedule-api\\src\\main\\kotlin\\testdata\\files\\faculties.txt")
+    val file = File(TEST_DATA_PATH + "faculties.txt")
     val sc = withContext(Dispatchers.IO) {
         Scanner(file)
     }
@@ -36,7 +37,7 @@ suspend fun deleteFaculty(vararg id: Int) {
 }
 
 suspend fun addUsers() {
-    val file = File("D:\\Projects\\schedule-api\\src\\main\\kotlin\\testdata\\files\\users.txt")
+    val file = File(TEST_DATA_PATH + "users.txt")
     val sc = withContext(Dispatchers.IO) {
         Scanner(file)
     }
@@ -53,7 +54,7 @@ suspend fun addUsers() {
 }
 
 suspend fun addInfo() {
-    val file = File("D:\\Projects\\schedule-api\\src\\main\\kotlin\\testdata\\files\\info.txt")
+    val file = File(TEST_DATA_PATH + "info.txt")
     val sc = withContext(Dispatchers.IO) {
         Scanner(file)
     }
@@ -79,7 +80,7 @@ suspend fun addInfo() {
 }
 
 suspend fun addTeachers() {
-    val file = File("D:\\Projects\\schedule-api\\src\\main\\kotlin\\testdata\\files\\teachers.txt")
+    val file = File(TEST_DATA_PATH + "teachers.txt")
     val sc = withContext(Dispatchers.IO) {
         Scanner(file)
     }
@@ -89,11 +90,12 @@ suspend fun addTeachers() {
         val prop = line.split(" - ")
 
         val email = prop[0]
-        val name = prop[1]
-        val academ = prop[2]
-        val facultyName = prop[3]
+        val password = prop[1]
+        val name = prop[2]
+        val academ = prop[3]
+        val facultyName = prop[4]
 
-        val userId = usersRepository.findUserByEmail(email)!!.id
+        val userId = usersRepository.addUser(email, password).id
         val faculty = facultyRepository.getFacultyByName(facultyName)!!
 
         usersRepository.addTeacher(userId, name, academ, faculty.id)
@@ -101,7 +103,7 @@ suspend fun addTeachers() {
 }
 
 suspend fun addStudents() {
-    val file = File("D:\\Projects\\schedule-api\\src\\main\\kotlin\\testdata\\files\\students.txt")
+    val file = File(TEST_DATA_PATH + "students.txt")
     val sc = withContext(Dispatchers.IO) {
         Scanner(file)
     }
@@ -154,19 +156,20 @@ suspend fun getStudents(facultyId: Int, course: Int, group: Int) {
 }
 
 suspend fun addSubjects() {
-    val file = File("D:\\Projects\\schedule-api\\src\\main\\kotlin\\testdata\\files\\subjects.txt")
+    val file = File(TEST_DATA_PATH + "subjects.txt")
     val sc = withContext(Dispatchers.IO) {
         Scanner(file)
     }
 
     while (sc.hasNextLine()) {
+        val facultyName = sc.nextLine()
+        val facultyId = facultyRepository.getFacultyByName(facultyName)!!.id
         val line = sc.nextLine()
-        println(line)
         val prop = line.split(" - ")
         val course = prop[0].toInt()
         val group = prop[1].toInt()
         val count = prop[2].toInt()
-        val info = facultyRepository.getInfoByFacultyCourseGroup(1, course, group) ?: break
+        val info = facultyRepository.getInfoByFacultyCourseGroup(facultyId, course, group) ?: break
 
         for (i in 0 until count) {
             val str = sc.nextLine()
