@@ -2,9 +2,7 @@ package com.example.repository
 
 import com.example.repository.tables.*
 import com.example.testdata.*
-import com.example.utils.Constants.DB_PASSWORD
-import com.example.utils.Constants.DB_URL
-import com.example.utils.Constants.DB_USER
+import com.example.utils.Db
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,9 +14,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 fun Application.configureDatabase() {
 
     Database.connect(
-        url = DB_URL,
-        user = DB_USER,
-        password = DB_PASSWORD
+        url = Db.DB_URL,
+        user = Db.DB_USER,
+        password = Db.DB_PASSWORD
     )
 
     transaction {

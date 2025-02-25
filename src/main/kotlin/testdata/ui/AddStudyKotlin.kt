@@ -5,8 +5,8 @@ import com.example.repository.model.Teacher
 import com.example.testdata.facultyRepository
 import com.example.testdata.scheduleRepository
 import com.example.testdata.usersRepository
-import com.example.utils.Constants.TIMES
 import com.example.utils.DaysOfWeek
+import com.example.utils.TestData
 import com.example.utils.TypeOfStudy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -122,7 +122,7 @@ class AddStudyKotlin {
             studiesAddingPanel.add(subjectPanel)
 
             val timeLabel = JLabel("Time: ")
-            val timeComboBox = JComboBox(TIMES)
+            val timeComboBox = JComboBox(TestData.TIMES)
             val timePanel = JPanel()
             timePanel.layout = FlowLayout(FlowLayout.CENTER)
             timePanel.add(timeLabel)

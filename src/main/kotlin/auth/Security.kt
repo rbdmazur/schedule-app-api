@@ -1,37 +1,22 @@
-package com.example.auth
-
+import com.example.auth.UserSession
 import com.example.repository.repositories.UsersRepository
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
-import io.ktor.server.sessions.*
+import kotlinx.html.InputType
 
+fun Application.configureSecurity(usersRepository: UsersRepository) {
+    val authConfig = environment.config.config("ktor.auth.form")
 
-fun Application.configureAuth(usersRepository: UsersRepository) {
-    install(Sessions) {
-        cookie<UserSession>("user_session") {
-            cookie.path = "/"
-            cookie.maxAgeInSeconds = 60
-        }
-    }
     install(Authentication) {
         form("auth-form") {
+            userParamName = "email"
+            passwordParamName = "password"
             validate { credentials ->
                 val user = usersRepository.findUserByEmail(credentials.name)
-                if (user != null && user.password == credentials.password) {
+                if (user != null && credentials.password == user.password) {
                     UserIdPrincipal(credentials.name)
-                } else {
-                    null
-                }
-            }
-        }
-
-        session<UserSession>("auth-session") {
-            validate { session ->
-                application.log.info("Validating session ${session.userId}")
-                val user = usersRepository.findUserById(session.userId)
-                if (user != null) {
-                    session
                 } else {
                     null
                 }
@@ -41,5 +26,21 @@ fun Application.configureAuth(usersRepository: UsersRepository) {
                 call.respondRedirect("/login")
             }
         }
+
+        session<UserSession>("auth-session") {
+            validate { session ->
+                val user = usersRepository.findUserByEmail(session.name)
+                if (user != null) {
+                    session
+                } else {
+                    null
+                }
+            }
+
+            challenge { call.respondRedirect("/login") }
+        }
     }
+
+
 }
+

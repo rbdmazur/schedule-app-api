@@ -5,7 +5,7 @@ import com.example.repository.model.Student
 import com.example.repository.repositories.FacultyRepository
 import com.example.repository.repositories.ScheduleRepository
 import com.example.repository.repositories.UsersRepository
-import com.example.utils.Constants.TEST_DATA_PATH
+import com.example.utils.TestData.TEST_DATA_PATH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
