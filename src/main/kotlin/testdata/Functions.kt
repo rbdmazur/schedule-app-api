@@ -1,5 +1,6 @@
 package com.example.testdata
 
+import com.example.auth.hashing.SHA256HashingService
 import com.example.repository.model.Info
 import com.example.repository.model.Student
 import com.example.repository.repositories.FacultyRepository
@@ -186,5 +187,18 @@ suspend fun addScheduleToStudents(scheduleId: Int) {
     val students = usersRepository.getStudentsByGroup(1, 1, 1)
     for (student in students) {
         scheduleRepository.addScheduleToStudent(scheduleId, student.userId, true)
+    }
+}
+
+suspend fun hashPasswords() {
+    val hashService = SHA256HashingService()
+    val users = usersRepository.getAllUsers()
+    users.forEach { user ->
+        val hashedUser = user.copy(
+            id = user.id,
+            email = user.email,
+            password = hashService.generateHash(user.password)
+        )
+        usersRepository.updateUser(hashedUser)
     }
 }
