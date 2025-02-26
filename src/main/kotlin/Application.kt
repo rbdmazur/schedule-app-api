@@ -9,6 +9,7 @@ import com.example.repository.configureDatabase
 import com.example.repository.repositories.FacultyRepository
 import com.example.repository.repositories.ScheduleRepository
 import com.example.repository.repositories.UsersRepository
+import com.example.routes.configureRouting
 import com.example.serialization.configureSerialization
 import com.example.service.FacultyService
 import com.example.service.ScheduleService
@@ -40,4 +41,5 @@ fun Application.module() {
     configureSerialization()
     configureDatabase()
     configureSecurity(tokenConfig)
+    configureRouting(userService, facultyService, scheduleService, hashingService, tokenService, tokenConfig)
 }

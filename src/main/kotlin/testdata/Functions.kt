@@ -202,3 +202,15 @@ suspend fun hashPasswords() {
         usersRepository.updateUser(hashedUser)
     }
 }
+
+suspend fun addSchedulesToStudents() {
+    val students = usersRepository.getStudentsByGroup(1, 1, 1)
+    students.forEach { student ->
+        scheduleRepository.addScheduleToStudent(16, student.userId, true)
+    }
+
+    val ist = usersRepository.getStudentsByGroup(2, 4, 4)
+    ist.forEach { student ->
+        scheduleRepository.addScheduleToStudent(17, student.userId, true)
+    }
+}
