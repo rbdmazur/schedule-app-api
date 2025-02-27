@@ -3,8 +3,9 @@ package com.example.service
 import com.example.repository.model.Faculty
 import com.example.repository.model.Info
 import com.example.repository.repositories.FacultyRepository
+import javax.inject.Inject
 
-class FacultyService(
+class FacultyService @Inject constructor(
     private val facultyRepository: FacultyRepository
 ) {
     //Faculty

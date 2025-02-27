@@ -11,13 +11,15 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
+import javax.inject.Inject
 
 fun Route.signIn(
+    tokenConfig: TokenConfig,
     userService: UserService,
     hashingService: HashingService,
-    tokenService: TokenService,
-    tokenConfig: TokenConfig
+    tokenService: TokenService
 ) {
+
     post("/signin") {
         val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)

@@ -6,8 +6,9 @@ import com.example.repository.model.Teacher
 import com.example.repository.model.User
 import com.example.repository.repositories.UsersRepository
 import java.util.UUID
+import javax.inject.Inject
 
-class UserService(
+class UserService @Inject constructor(
     private val usersRepository: UsersRepository
 ) {
     //User

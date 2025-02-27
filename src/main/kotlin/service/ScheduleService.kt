@@ -8,8 +8,9 @@ import com.example.repository.repositories.ScheduleRepository
 import com.example.utils.DaysOfWeek
 import com.example.utils.TypeOfStudy
 import java.util.UUID
+import javax.inject.Inject
 
-class ScheduleService(
+class ScheduleService @Inject constructor(
     private val scheduleRepository: ScheduleRepository
 ) {
     //Subject

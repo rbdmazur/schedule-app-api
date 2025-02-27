@@ -1,24 +1,25 @@
 package com.example.routes
 
-import com.example.auth.hashing.HashingService
+import com.example.auth.hashing.SHA256HashingService
+import com.example.auth.token.JwtTokenService
 import com.example.auth.token.TokenConfig
-import com.example.auth.token.TokenService
-import com.example.service.FacultyService
-import com.example.service.ScheduleService
-import com.example.service.UserService
+import com.example.di.DaggerRouteComponent
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting(
-    userService: UserService,
-    facultyService: FacultyService,
-    scheduleService: ScheduleService,
-    hashingService: HashingService,
-    tokenService: TokenService,
     tokenConfig: TokenConfig
 ) {
+    val routeComponent = DaggerRouteComponent.builder().build()
+
+    val userService = routeComponent.getUserService()
+    val facultyService = routeComponent.getFacultyService()
+    val scheduleService = routeComponent.getScheduleService()
+
+    val hashingService = SHA256HashingService()
+    val tokenService = JwtTokenService()
     routing {
-        signIn(userService, hashingService, tokenService, tokenConfig)
+        signIn(tokenConfig, userService, hashingService, tokenService)
         scheduleRoutes(scheduleService)
     }
 }

@@ -8,9 +8,8 @@ import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import java.util.*
 
-fun Route.scheduleRoutes(
-    scheduleService: ScheduleService
-) {
+
+fun Route.scheduleRoutes(scheduleService: ScheduleService) {
     authenticate {
         route("/schedules") {
             get {

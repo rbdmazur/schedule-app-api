@@ -3,11 +3,13 @@ val h2_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val postgres_version: String by project
+val koin_version = "4.0.0"
 
 plugins {
     kotlin("jvm") version "2.1.10"
     id("io.ktor.plugin") version "3.0.3"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.10"
+    kotlin("kapt") version "2.1.10"
 }
 
 group = "com.example"
@@ -38,6 +40,7 @@ dependencies {
     implementation("com.h2database:h2:$h2_version")
     // https://mvnrepository.com/artifact/commons-codec/commons-codec
     implementation("commons-codec:commons-codec:1.5")
+    implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
@@ -48,4 +51,9 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    implementation("com.google.dagger:dagger:2.46.1")
+
+    annotationProcessor("com.google.dagger:dagger-compiler:2.46.1")
+    kapt("com.google.dagger:dagger-compiler:2.46.1")
 }
