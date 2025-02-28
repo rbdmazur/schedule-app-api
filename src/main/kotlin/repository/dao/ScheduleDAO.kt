@@ -11,4 +11,6 @@ interface ScheduleDAO {
 
     suspend fun getScheduleById(id: Int): Schedule?
     suspend fun getScheduleByInfo(infoId: Int): Schedule?
+    suspend fun getSchedulesForFaculty(facultyId: Int): List<Schedule>
+    suspend fun getSchedulesForCourse(facultyId: Int, course: Int): List<Schedule>
 }

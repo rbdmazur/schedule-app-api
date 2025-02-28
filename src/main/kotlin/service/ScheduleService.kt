@@ -57,6 +57,12 @@ class ScheduleService @Inject constructor(
     suspend fun getScheduleByInfo(infoId: Int): Schedule? =
         scheduleRepository.getScheduleByInfo(infoId)
 
+    suspend fun getSchedulesForFaculty(facultyId: Int): List<Schedule> =
+        scheduleRepository.getSchedulesForFaculty(facultyId)
+
+    suspend fun getSchedulesForCourse(facultyId: Int, course: Int): List<Schedule> =
+        scheduleRepository.getSchedulesForCourse(facultyId, course)
+
     //Study
     suspend fun getAllStudies(): List<Study> =
         scheduleRepository.getAllStudies()

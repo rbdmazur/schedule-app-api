@@ -21,5 +21,7 @@ fun Application.configureRouting(
     routing {
         signIn(tokenConfig, userService, hashingService, tokenService)
         scheduleRoutes(scheduleService)
+        subjectRoutes(scheduleService, userService)
+        infoRoutes(facultyService)
     }
 }

@@ -52,4 +52,10 @@ class FacultyService @Inject constructor(
         group: Int
     ) : Info? =
         facultyRepository.getInfoByFacultyCourseGroup(facultyId, course, group)
+
+    suspend fun getInfosForFaculty(facultyId: Int): List<Info> =
+        facultyRepository.getInfosForFaculty(facultyId)
+
+    suspend fun getInfosForCourse(facultyId: Int, course: Int): List<Info> =
+        facultyRepository.getInfosForCourse(facultyId, course)
 }

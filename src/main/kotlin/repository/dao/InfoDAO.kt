@@ -10,4 +10,6 @@ interface InfoDAO {
     suspend fun getInfoByFacultyCourseGroup(facultyId: Int, course: Int, group: Int): Info?
     suspend fun deleteInfo(infoId: Int): Boolean
     suspend fun getAllInfo(): List<Info>
+    suspend fun getInfosForFaculty(facultyId: Int): List<Info>
+    suspend fun getInfosForCourse(facultyId: Int, course: Int): List<Info>
 }

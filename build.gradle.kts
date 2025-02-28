@@ -3,7 +3,6 @@ val h2_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val postgres_version: String by project
-val koin_version = "4.0.0"
 
 plugins {
     kotlin("jvm") version "2.1.10"
@@ -40,7 +39,6 @@ dependencies {
     implementation("com.h2database:h2:$h2_version")
     // https://mvnrepository.com/artifact/commons-codec/commons-codec
     implementation("commons-codec:commons-codec:1.5")
-    implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")

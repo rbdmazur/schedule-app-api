@@ -15,7 +15,6 @@ fun Route.scheduleRoutes(scheduleService: ScheduleService) {
             get {
                 val principal = call.principal<JWTPrincipal>()
                 val userId = principal?.payload?.getClaim("userId")?.asString()
-                println("User ID is $userId")
                 if (userId == null) {
                     call.respond(HttpStatusCode.BadRequest)
                     return@get
@@ -24,6 +23,53 @@ fun Route.scheduleRoutes(scheduleService: ScheduleService) {
                 val schedules = scheduleService.getSchedulesForStudent(UUID.fromString(userId))
 
                 call.respond(HttpStatusCode.OK, schedules)
+            }
+
+            get("/{scheduleId}") {
+                val scheduleId = call.parameters["scheduleId"]
+                if (scheduleId == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@get
+                }
+                val studies = scheduleService.getStudiesForScheduleId(scheduleId.toInt())
+                call.respond(HttpStatusCode.OK, studies)
+            }
+        }
+
+        route("/all-schedules") {
+            get {
+                val schedules = scheduleService.getAllSchedules()
+
+                if (schedules.isEmpty()) {
+                    call.respond(HttpStatusCode.NoContent)
+                    return@get
+                }
+
+                call.respond(HttpStatusCode.OK, schedules)
+            }
+
+            route("/{faculty}") {
+                get {
+                    val faculty = call.parameters["faculty"]
+                    if (faculty == null) {
+                        call.respond(HttpStatusCode.BadRequest)
+                        return@get
+                    }
+
+                    val schedules = scheduleService.getSchedulesForFaculty(faculty.toInt())
+                    call.respond(HttpStatusCode.OK, schedules)
+                }
+                get("/{course}") {
+                    val faculty = call.parameters["faculty"]
+                    val course = call.parameters["course"]
+                    if (course == null || faculty == null) {
+                        call.respond(HttpStatusCode.BadRequest)
+                        return@get
+                    }
+
+                    val schedules = scheduleService.getSchedulesForCourse(faculty.toInt(), course.toInt())
+                    call.respond(HttpStatusCode.OK, schedules)
+                }
             }
         }
     }

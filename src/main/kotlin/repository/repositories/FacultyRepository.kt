@@ -6,7 +6,6 @@ import com.example.repository.dbQuery
 import com.example.repository.model.Faculty
 import com.example.repository.model.Info
 import com.example.repository.tables.Faculties
-import com.example.repository.tables.Faculties.fullTitle
 import com.example.repository.tables.Infos
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -89,6 +88,22 @@ class FacultyRepository : FacultyDAO, InfoDAO {
                 .where { (Infos.facultyId eq facultyId) and (Infos.course eq course) and (Infos.group eq group) }
                 .map { rowToInfo(it) }
                 .singleOrNull()
+        }
+
+    override suspend fun getInfosForFaculty(facultyId: Int): List<Info> =
+        dbQuery {
+            Infos.selectAll()
+                .where { Infos.facultyId eq facultyId }
+                .map { rowToInfo(it) }
+                .requireNoNulls()
+        }
+
+    override suspend fun getInfosForCourse(facultyId: Int, course: Int): List<Info> =
+        dbQuery {
+            Infos.selectAll()
+                .where { (Infos.facultyId eq facultyId) and (Infos.course eq course) }
+                .map { rowToInfo(it) }
+                .requireNoNulls()
         }
 
     private fun rowToFaculty(row: ResultRow?): Faculty? {
