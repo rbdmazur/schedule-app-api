@@ -23,5 +23,6 @@ fun Application.configureRouting(
         scheduleRoutes(scheduleService)
         subjectRoutes(scheduleService, userService)
         infoRoutes(facultyService)
+        userRoutes(userService)
     }
 }

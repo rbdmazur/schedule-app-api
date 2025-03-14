@@ -1,5 +1,7 @@
 package com.example.routes
 
+import com.example.routes.responses.ScheduleResponse
+import com.example.routes.responses.StudiesResponse
 import com.example.service.ScheduleService
 import io.ktor.http.*
 import io.ktor.server.auth.*
@@ -21,8 +23,9 @@ fun Route.scheduleRoutes(scheduleService: ScheduleService) {
                 }
 
                 val schedules = scheduleService.getSchedulesForStudent(UUID.fromString(userId))
+                val scheduleResponse = ScheduleResponse(schedules)
 
-                call.respond(HttpStatusCode.OK, schedules)
+                call.respond(HttpStatusCode.OK, scheduleResponse)
             }
 
             get("/{scheduleId}") {
@@ -32,7 +35,8 @@ fun Route.scheduleRoutes(scheduleService: ScheduleService) {
                     return@get
                 }
                 val studies = scheduleService.getStudiesForScheduleId(scheduleId.toInt())
-                call.respond(HttpStatusCode.OK, studies)
+                val response = StudiesResponse(studies)
+                call.respond(HttpStatusCode.OK, response)
             }
         }
 

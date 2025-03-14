@@ -10,6 +10,7 @@ import com.example.repository.model.Study
 import com.example.repository.model.Subject
 import com.example.repository.model.Teacher
 import com.example.repository.tables.*
+import com.example.routes.responses.ScheduleResponseItem
 import com.example.utils.DaysOfWeek
 import com.example.utils.TypeOfStudy
 import org.jetbrains.exposed.sql.*
@@ -232,12 +233,12 @@ class ScheduleRepository : SubjectDAO, ScheduleDAO, StudyDAO, StudentsToSchedule
                 .deleteWhere { (StudentsToSchedules.scheduleId eq scheduleId) and (StudentsToSchedules.studentId eq studentId) } == 1
         }
 
-    override suspend fun getSchedulesForStudent(studentId: UUID): List<Schedule> =
+    override suspend fun getSchedulesForStudent(studentId: UUID): List<ScheduleResponseItem> =
         dbQuery {
             StudentsToSchedules.join(Schedules, JoinType.INNER, StudentsToSchedules.scheduleId, Schedules.id)
                 .join(Students, JoinType.INNER, StudentsToSchedules.studentId, Students.userId)
                 .selectAll().where { StudentsToSchedules.studentId eq studentId }
-                .map { rowToSchedule(it) }.requireNoNulls()
+                .map { rowToScheduleResponse(it) }.requireNoNulls()
         }
 
     private fun rowToSubject(row: ResultRow?): Subject? {
@@ -263,6 +264,22 @@ class ScheduleRepository : SubjectDAO, ScheduleDAO, StudyDAO, StudentsToSchedule
             title = row[Schedules.title],
             lastUpdate = row[Schedules.lastUpdate].toEpochMilli(),
             infoId = row[Schedules.infoId],
+        )
+    }
+
+    private fun rowToScheduleResponse(row: ResultRow?): ScheduleResponseItem? {
+        if (row == null) {
+            return null
+        }
+
+        return ScheduleResponseItem(
+            schedule = Schedule(
+                id = row[Schedules.id].value,
+                title = row[Schedules.title],
+                lastUpdate = row[Schedules.lastUpdate].toEpochMilli(),
+                infoId = row[Schedules.infoId]
+            ),
+            isMain = row[StudentsToSchedules.isMain]
         )
     }
 

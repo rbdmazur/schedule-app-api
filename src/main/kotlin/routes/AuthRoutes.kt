@@ -49,7 +49,7 @@ fun Route.signIn(
                 value = user.id.toString()
             )
         )
-        call.respond(HttpStatusCode.OK, AuthResponse(token = token))
+        call.respond(HttpStatusCode.OK, AuthResponse(userId = user.id.toString(), token = token))
     }
     get("/signin") {
         call.respondText(

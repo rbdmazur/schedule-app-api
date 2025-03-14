@@ -5,6 +5,7 @@ import com.example.repository.model.Study
 import com.example.repository.model.Subject
 import com.example.repository.model.Teacher
 import com.example.repository.repositories.ScheduleRepository
+import com.example.routes.responses.ScheduleResponseItem
 import com.example.utils.DaysOfWeek
 import com.example.utils.TypeOfStudy
 import java.util.UUID
@@ -115,6 +116,6 @@ class ScheduleService @Inject constructor(
     suspend fun deleteScheduleFromStudent(scheduleId: Int, studentId: UUID): Boolean =
         scheduleRepository.deleteScheduleFromStudent(scheduleId, studentId)
 
-    suspend fun getSchedulesForStudent(studentId: UUID): List<Schedule> =
+    suspend fun getSchedulesForStudent(studentId: UUID): List<ScheduleResponseItem> =
         scheduleRepository.getSchedulesForStudent(studentId)
 }
