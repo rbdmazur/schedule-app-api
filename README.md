@@ -1,4 +1,4 @@
-#Schedule App Api
+# Schedule App Api
 Api для [мобильного приложения учебного расписания](https://github.com/rbdmazur/ScheduleApp)
 ## Использованные технологии
 - Kotlin Ktor
