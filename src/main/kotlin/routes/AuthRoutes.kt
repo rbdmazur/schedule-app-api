@@ -8,10 +8,10 @@ import com.example.routes.requests.AuthRequest
 import com.example.routes.responses.AuthResponse
 import com.example.service.UserService
 import io.ktor.http.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
-import javax.inject.Inject
 
 fun Route.signIn(
     tokenConfig: TokenConfig,
@@ -50,6 +50,11 @@ fun Route.signIn(
             )
         )
         call.respond(HttpStatusCode.OK, AuthResponse(userId = user.id.toString(), token = token))
+    }
+    authenticate {
+        get("/auth") {
+            call.respond(HttpStatusCode.OK)
+        }
     }
     get("/signin") {
         call.respondText(

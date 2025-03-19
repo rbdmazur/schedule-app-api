@@ -17,6 +17,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.time.Instant
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ScheduleRepository : SubjectDAO, ScheduleDAO, StudyDAO, StudentsToScheduleDAO {
     override suspend fun getAllSubjects(): List<Subject> =
@@ -240,6 +241,59 @@ class ScheduleRepository : SubjectDAO, ScheduleDAO, StudyDAO, StudentsToSchedule
                 .selectAll().where { StudentsToSchedules.studentId eq studentId }
                 .map { rowToScheduleResponse(it) }.requireNoNulls()
         }
+
+    override suspend fun getSchedulesByFilter(
+        userId: UUID,
+        facultyId: Int?,
+        course: Int?,
+        group: Int?
+    ): List<Schedule> {
+        var expr: Op<Boolean>? = null
+
+        if (facultyId != null) {
+            expr = Infos.facultyId eq facultyId
+        }
+        if (course != null) {
+            if (expr == null) {
+                expr = Infos.course eq course
+            } else {
+                expr.and(Infos.course eq course)
+            }
+        }
+        if (group != null) {
+            if (expr == null) {
+                expr = Infos.group eq group
+            } else {
+                expr.and(Infos.group eq group)
+            }
+        }
+
+        val resp = if (expr != null) {
+            dbQuery {
+                Schedules.join(Infos, JoinType.INNER, Schedules.infoId, Infos.id)
+                    .selectAll().where { expr }.map { rowToSchedule(it) }.requireNoNulls()
+            }
+        } else {
+            dbQuery {
+                Schedules.selectAll().map { rowToSchedule(it) }.requireNoNulls()
+            }
+        }
+
+        val usersSchedules = dbQuery {
+            Schedules
+                .join(StudentsToSchedules, JoinType.INNER, Schedules.id, StudentsToSchedules.scheduleId)
+                .selectAll().where { StudentsToSchedules.studentId eq userId }
+                .map { rowToSchedule(it) }.requireNoNulls()
+        }
+        val result = ArrayList<Schedule>()
+
+        resp.forEach {
+            if (!usersSchedules.contains(it)) {
+                result.add(it)
+            }
+        }
+        return result
+    }
 
     private fun rowToSubject(row: ResultRow?): Subject? {
         if (row == null) {

@@ -1,6 +1,7 @@
 package com.example.repository.dao
 
 import com.example.repository.model.Schedule
+import java.util.*
 
 
 interface ScheduleDAO {
@@ -13,4 +14,5 @@ interface ScheduleDAO {
     suspend fun getScheduleByInfo(infoId: Int): Schedule?
     suspend fun getSchedulesForFaculty(facultyId: Int): List<Schedule>
     suspend fun getSchedulesForCourse(facultyId: Int, course: Int): List<Schedule>
+    suspend fun getSchedulesByFilter(userId: UUID, facultyId: Int?, course: Int?, group: Int?): List<Schedule>
 }

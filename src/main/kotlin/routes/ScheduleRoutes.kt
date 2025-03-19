@@ -1,11 +1,15 @@
 package com.example.routes
 
+import com.example.routes.requests.ScheduleRequest
+import com.example.routes.requests.ScheduleRequestList
 import com.example.routes.responses.ScheduleResponse
+import com.example.routes.responses.ScheduleSimpleResponse
 import com.example.routes.responses.StudiesResponse
 import com.example.service.ScheduleService
 import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import java.util.*
@@ -52,28 +56,42 @@ fun Route.scheduleRoutes(scheduleService: ScheduleService) {
                 call.respond(HttpStatusCode.OK, schedules)
             }
 
-            route("/{faculty}") {
-                get {
-                    val faculty = call.parameters["faculty"]
-                    if (faculty == null) {
-                        call.respond(HttpStatusCode.BadRequest)
-                        return@get
-                    }
-
-                    val schedules = scheduleService.getSchedulesForFaculty(faculty.toInt())
-                    call.respond(HttpStatusCode.OK, schedules)
+            get("/{userId}") {
+                val userId = call.parameters["userId"]
+                if (userId == null) {
+                    call.respond(HttpStatusCode.BadRequest)
                 }
-                get("/{course}") {
-                    val faculty = call.parameters["faculty"]
-                    val course = call.parameters["course"]
-                    if (course == null || faculty == null) {
-                        call.respond(HttpStatusCode.BadRequest)
-                        return@get
-                    }
+                val facultyId = call.parameters["facultyId"]
+                val course = call.parameters["course"]
+                val group = call.parameters["group"]
 
-                    val schedules = scheduleService.getSchedulesForCourse(faculty.toInt(), course.toInt())
-                    call.respond(HttpStatusCode.OK, schedules)
+                val schedules = scheduleService.getSchedulesByFilter(
+                    userId = UUID.fromString(userId),
+                    facultyId = facultyId?.toInt(),
+                    course = course?.toInt(),
+                    group = group?.toInt()
+                )
+
+                val response = ScheduleSimpleResponse(schedules)
+                call.respond(HttpStatusCode.OK, response)
+            }
+
+            post("/{userId}") {
+                val userId = call.parameters["userId"]
+                if (userId == null) {
+                    call.respond(HttpStatusCode.BadRequest)
                 }
+
+                val request = call.receive<ScheduleRequestList>()
+
+                request.list.forEach {
+                    scheduleService.addScheduleToStudent(
+                        scheduleId = it.scheduleId.toInt(),
+                        studentId = UUID.fromString(userId),
+                        isMain = it.isMain
+                    )
+                }
+                call.respond(HttpStatusCode.Created)
             }
         }
     }

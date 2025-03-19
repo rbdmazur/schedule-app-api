@@ -118,4 +118,7 @@ class ScheduleService @Inject constructor(
 
     suspend fun getSchedulesForStudent(studentId: UUID): List<ScheduleResponseItem> =
         scheduleRepository.getSchedulesForStudent(studentId)
+
+    suspend fun getSchedulesByFilter(userId: UUID, facultyId: Int? = null, course: Int? = null, group: Int? = null): List<Schedule> =
+        scheduleRepository.getSchedulesByFilter(userId, facultyId, course, group)
 }

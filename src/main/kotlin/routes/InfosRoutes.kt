@@ -1,5 +1,6 @@
 package com.example.routes
 
+import com.example.routes.responses.FacultyResponse
 import com.example.service.FacultyService
 import io.ktor.http.*
 import io.ktor.server.auth.*
@@ -15,7 +16,8 @@ fun Route.infoRoutes(facultyService: FacultyService) {
                     call.respond(HttpStatusCode.NoContent)
                     return@get
                 }
-                call.respond(HttpStatusCode.OK, faculties)
+                val response = FacultyResponse(faculties)
+                call.respond(HttpStatusCode.OK, response)
             }
 
             get("/{facultyId}") {

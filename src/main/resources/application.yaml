@@ -15,3 +15,6 @@ jwt:
   domain: "http://192.168.1.5:5555"
   audience: "users"
   realm: "schedule api"
+
+  #172.20.10.2
+  #192.168.1.5
