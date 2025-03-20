@@ -257,16 +257,17 @@ class ScheduleRepository : SubjectDAO, ScheduleDAO, StudyDAO, StudentsToSchedule
             if (expr == null) {
                 expr = Infos.course eq course
             } else {
-                expr.and(Infos.course eq course)
+                expr = expr.and(Infos.course eq course)
             }
         }
         if (group != null) {
             if (expr == null) {
                 expr = Infos.group eq group
             } else {
-                expr.and(Infos.group eq group)
+                expr = expr.and(Infos.group eq group)
             }
         }
+//        println("expr is $expr")
 
         val resp = if (expr != null) {
             dbQuery {

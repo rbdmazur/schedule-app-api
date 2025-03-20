@@ -42,6 +42,22 @@ fun Route.scheduleRoutes(scheduleService: ScheduleService) {
                 val response = StudiesResponse(studies)
                 call.respond(HttpStatusCode.OK, response)
             }
+
+            delete("/{scheduleId}") {
+                val principal = call.principal<JWTPrincipal>()
+                val userId = principal?.payload?.getClaim("userId")?.asString()
+                if (userId == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@delete
+                }
+                val scheduleId = call.parameters["scheduleId"]
+                if (scheduleId == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@delete
+                }
+                scheduleService.deleteScheduleFromStudent(scheduleId.toInt(), UUID.fromString(userId))
+                call.respond(HttpStatusCode.OK)
+            }
         }
 
         route("/all-schedules") {
@@ -71,6 +87,7 @@ fun Route.scheduleRoutes(scheduleService: ScheduleService) {
                     course = course?.toInt(),
                     group = group?.toInt()
                 )
+                println("course: $course, group: $group, facultyId: $facultyId")
 
                 val response = ScheduleSimpleResponse(schedules)
                 call.respond(HttpStatusCode.OK, response)
